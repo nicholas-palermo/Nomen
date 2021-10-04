@@ -73,6 +73,7 @@ public class UI implements ActionListener{
 		//Screen.add(tmp);
 		//Screen.setVisible(true);//what enables us to see it!!!
 		
+		// This is just here for commit test
 	}
 	
 	void loginMenu() {}
