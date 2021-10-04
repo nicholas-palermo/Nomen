@@ -5,6 +5,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.control.TextField;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -54,7 +61,19 @@ public class UI implements ActionListener{
 		Screen.setVisible(true);//what enables us to see it!!!
 	}
 	
-	void signupMenu() {}
+	void signupMenu() {
+		tmp = new JPanel();//area of screen
+		tmp.setBounds(0,0,500,750);
+		
+		Label userText = new Label("Username");
+		Label passText = new Label("Password");
+		Label confirmText = new Label("Confirm Password");
+		
+		//tmp.add(userText);
+		//Screen.add(tmp);
+		//Screen.setVisible(true);//what enables us to see it!!!
+		
+	}
 	
 	void loginMenu() {}
 	
