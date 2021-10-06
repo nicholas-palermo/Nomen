@@ -43,7 +43,6 @@ public class UI implements ActionListener{
 		signup = new JButton("signup");
 		signup.setFont(bFont);
 		signup.addActionListener(this);
-
 		
 
 
