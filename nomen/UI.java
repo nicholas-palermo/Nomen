@@ -82,7 +82,7 @@ public class UI implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == signup){
-		UI.signupMenu();
+		//UI.signupMenu();
 		}
 	}
 	
