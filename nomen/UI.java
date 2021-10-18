@@ -1,90 +1,123 @@
 package nomen;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import javafx.scene.control.Label;
+import javafx.application.Application;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-public class UI implements ActionListener{
-	
-	JFrame Screen;
-	JPanel tmp;
-	JLabel text;
-	JButton signup,login;
-	Font bFont = new Font("Times New Roman", Font.PLAIN, 45);
-	Font tFont = new Font("Times New Roman", Font.PLAIN, 75);
-	void start() {		//Initial function
-		Screen = new JFrame("Nomen");
-		openMenu();
-	}
-	
-	void openMenu(){	//first menu
-		tmp = new JPanel();//area of screen
-		tmp.setBounds(0,0,500,750);
-		
-		text = new JLabel("Nomen");
-		text.setFont(tFont);
-		
-		login = new JButton("login");
-		login.setFont(bFont);
-		
-		signup = new JButton("signup");
-		signup.setFont(bFont);
-		signup.addActionListener(this);
-		
+import java.sql.*;
 
 
-		
-		Screen.setSize(500,750);
-		Screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Screen.getContentPane().setBackground(Color.white);
-		Screen.setLayout(null);
-		Screen.setResizable(false);
-		
-		tmp.add(text);
-		tmp.add(login);
-		tmp.add(signup);
-		Screen.add(tmp);
-		Screen.setVisible(true);//what enables us to see it!!!
-	}
+public class UI extends Application{
 	
-	void signupMenu() {
-		tmp = new JPanel();//area of screen
-		tmp.setBounds(0,0,500,750);
-		
-		Label userText = new Label("Username");
-		Label passText = new Label("Password");
-		Label confirmText = new Label("Confirm Password");
-		
-		//tmp.add(userText);
-		//Screen.add(tmp);
-		//Screen.setVisible(true);//what enables us to see it!!!
-		
-		// This is just here for commit test
-	}
-	
-	void loginMenu() {}
-	
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void start(Stage primaryStage) {
 		// TODO Auto-generated method stub
-		if(e.getSource() == signup){
-		//UI.signupMenu();
-		}
+
+		primaryStage.setTitle("Nomen");
+
+		// begin application on the login screen
+		Scene scene1 = firstScreen();
+		primaryStage.setScene(scene1);
+		primaryStage.show();
 	}
+	
+	/**
+	 * opening screen with sign in and sign up buttons
+	 * @return login screen
+	 */
+	public Scene firstScreen() {
+		Label title = new Label("NOMEN");
+		
+		// navigates to sign in screen
+		Button signIn = new Button("Login");
+		signIn.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(logInScreen());
+			}
+		);
+		
+		// navigates to sign up screen
+		Button signUp = new Button("Sign up");
+		signUp.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(signUpScreen());
+			});
+		
+		HBox buttons = new HBox();
+		buttons.getChildren().addAll(signIn, signUp);
+		buttons.setSpacing(20);
+		
+		VBox layout1 = new VBox();
+		layout1.getChildren().addAll(title, buttons);
+		layout1.setSpacing(20);
+		Scene scene1 = new Scene(layout1, 500,500);
+		return scene1;
+	}
+	
+	/**
+	 * sign up screen for creating an account
+	 * @return sign up screen
+	 */
+	public Scene signUpScreen() {
+		Label title = new Label("Sign Up");
+		TextField username = new TextField("username");
+		TextField password = new TextField("password");
+		TextField confirm = new TextField("confirm password");
+		
+		Button submit = new Button("Submit");
+		
+		// navigates back to the first screen
+		Button back = new Button("Return");
+		back.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
+		HBox buttons = new HBox();
+		buttons.getChildren().addAll(submit, back);
+		buttons.setSpacing(20);
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, username, password, confirm, buttons);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
+	/**
+	 * sign in screen for logging in to existing account
+	 * @return sign in screen
+	 */
+	public Scene logInScreen() {
+		Label title = new Label("Login");
+		TextField username = new TextField("username");
+		TextField password = new TextField("password");
+		
+		Button submit = new Button("Submit");
+		
+		// navigates back to the first screen
+		Button back = new Button("Return");
+		back.setOnAction(e->{
+			Stage stage = (Stage) back.getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
+		HBox buttons = new HBox();
+		buttons.getChildren().addAll(submit, back);
+		buttons.setSpacing(20);
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, username, password, buttons);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
+	
+	
 	
 	
 }
