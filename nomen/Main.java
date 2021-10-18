@@ -2,7 +2,9 @@ package nomen;
 
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -26,20 +28,20 @@ public class Main extends Application{
 	@Override
 	public void start(Stage primaryStage) {
 		// TODO Auto-generated method stub
-
-		primaryStage.setTitle("Nomen");
-
-		// begin application on the login screen
-		Scene scene1 = firstScreen();
-		primaryStage.setScene(scene1);
-		primaryStage.show();
+		try {
+			Parent root = FXMLLoader.load(getClass().getResource("StartUpScreen.fxml"));
+			Scene scene = new Scene(root);
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
-	/**
-	 * opening screen with sign in and sign up buttons
-	 * @return login screen
-	 */
-	public Scene firstScreen() {
+	/*
+	 * 
+	 * public Scene firstScreen() {
 		Label title = new Label("NOMEN");
 		
 		// navigates to sign in screen
@@ -68,10 +70,7 @@ public class Main extends Application{
 		return scene1;
 	}
 	
-	/**
-	 * sign up screen for creating an account
-	 * @return sign up screen
-	 */
+	
 	public Scene signUpScreen() {
 		Label title = new Label("Sign Up");
 		TextField username = new TextField("username");
@@ -97,10 +96,7 @@ public class Main extends Application{
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
-	/**
-	 * sign in screen for logging in to existing account
-	 * @return sign in screen
-	 */
+	
 	public Scene signInScreen() {
 		Label title = new Label("Sign In");
 		TextField username = new TextField("username");
@@ -125,6 +121,8 @@ public class Main extends Application{
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
+	 */
+	
 	
 	
 }
