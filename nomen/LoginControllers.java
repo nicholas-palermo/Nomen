@@ -16,21 +16,21 @@ public class LoginControllers {
 	private Parent root;
 	
 	public void switchToSignIn(ActionEvent event) throws IOException {
-		root = FXMLLoader.load(getClass().getResource("SignInScreen.fxml"));
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/SignInScreen.fxml"));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
 	}
 	public void switchToSignUp(ActionEvent event) throws IOException {
-		root = FXMLLoader.load(getClass().getResource("SignUpScreen.fxml"));
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/SignUpScreen.fxml"));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
 	}
 	public void switchToStartUp(ActionEvent event) throws IOException {
-		root = FXMLLoader.load(getClass().getResource("StartUpScreen.fxml"));
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/StartUpScreen.fxml"));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);

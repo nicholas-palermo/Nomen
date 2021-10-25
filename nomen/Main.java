@@ -20,7 +20,7 @@ public class Main extends Application{
 	public void start(Stage primaryStage) {
 		// TODO Auto-generated method stub
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("StartUpScreen.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/Nomen/screens/StartUpScreen.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
 			primaryStage.show();
