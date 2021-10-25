@@ -5,6 +5,8 @@ public class Main extends UI{
 		// TODO Auto-generated method stub
 		//UI tmp = new UI();
 		//tmp.start();
+		Database db = new Database();
+		db.testq();
 		launch(args);
 	}
 	
