@@ -14,16 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Main extends Application{
-	
-	
-	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		//UI tmp = new UI();
-		//tmp.start();
-		launch(args);
-	}
+
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -124,5 +115,8 @@ public class Main extends Application{
 	 */
 	
 	
+
 	
 }
+
+
