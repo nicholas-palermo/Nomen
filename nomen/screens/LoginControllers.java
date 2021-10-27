@@ -1,4 +1,4 @@
-package nomen;
+package nomen.screens;
 
 import java.io.IOException;
 
@@ -31,6 +31,20 @@ public class LoginControllers {
 	}
 	public void switchToStartUp(ActionEvent event) throws IOException {
 		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/StartUpScreen.fxml"));
+		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	public void switchToAccountPage(ActionEvent event) throws IOException {
+		/*
+		 * Here it will need to be checked whether the user logging in is an employee, HR, or manager
+		 * and switch to the according account menu
+		 */
+		String url = "/Nomen/screens/";
+		// if (account == employee) 
+		url += "acMenuEmp.fxml";
+		root = FXMLLoader.load(getClass().getResource(url));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
 		stage.setScene(scene);
