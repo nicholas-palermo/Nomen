@@ -24,7 +24,6 @@ public class Database {
 	}
 	
 	public boolean loginCheck(String uname, String pass) {
-		int uid = Integer.parseInt(uname);
 		String q = "SELECT Employee_ID, Employee_Password FROM Employees WHERE Employee_ID = "+uname+";";
 		PreparedStatement stat;
 		try {
@@ -35,7 +34,7 @@ public class Database {
 				System.out.print(set.getString(1)+" ");
 				System.out.print(set.getString(2));
 			}*/
-				if(set.getInt(1)==uid){
+				if(set.getString(1).equals(uname)){
 					if(pass.equals(set.getString(2))) {
 						use.setaLv(uname);
 						return true;
@@ -52,9 +51,7 @@ public class Database {
 		}
 		return false;
 		}
-	
-	
-	
+		
 	public  void testq() {
 		PreparedStatement Q;
 		try {
@@ -114,6 +111,5 @@ public class Database {
 			}
 		}
 	}
-	
-	
+		
 }
