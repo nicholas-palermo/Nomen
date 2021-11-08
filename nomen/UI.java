@@ -3,6 +3,8 @@ package nomen;
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class UI extends Application{
+	
+	Database db = new Database();
 	
 	public void start(Stage primaryStage) {
 		// TODO Auto-generated method stub
@@ -93,8 +97,21 @@ public class UI extends Application{
 		Label title = new Label("Login");
 		TextField username = new TextField("username");
 		TextField password = new TextField("password");
+		Alert errorAlert = new Alert(AlertType.ERROR);
 		
 		Button submit = new Button("Submit");
+		submit.setOnAction(e->{
+		//System.out.print(db.loginCheck(username.getText(), password.getText()));
+			if(db.loginCheck(username.getText(), password.getText())) {//checks if username and password true
+				Stage stage = (Stage) submit.getScene().getWindow();
+				stage.setScene(accMenuEmp());
+				System.out.print(db.use.getALv());
+			}else {//error pop up
+				errorAlert.setHeaderText("Error");
+				errorAlert.setContentText("Invalid Username or Password.");
+				errorAlert.showAndWait();
+			}
+		});
 		
 		// navigates back to the first screen
 		Button back = new Button("Return");
@@ -122,7 +139,7 @@ public class UI extends Application{
 		return scene;
 	}
 	
-	// accmenu
+	
 	public Scene accMenuEmp() {
 		Label title = new Label("Account Menu");
 		
@@ -137,3 +154,4 @@ public class UI extends Application{
 	}
 	
 }
+
