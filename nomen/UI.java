@@ -10,9 +10,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import java.sql.*;
-
-
 public class UI extends Application{
 	
 	public void start(Stage primaryStage) {
@@ -106,18 +103,37 @@ public class UI extends Application{
 			stage.setScene(firstScreen());
 			});
 		
+		//tmp button to get to account menu to follow flow
+		Button tmp = new Button("tmp");
+		tmp.setOnAction(e->{
+			Stage stage = (Stage) tmp.getScene().getWindow();
+			stage.setScene(accMenuEmp());
+			});
+		
+		
 		HBox buttons = new HBox();
 		buttons.getChildren().addAll(submit, back);
 		buttons.setSpacing(20);
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, username, password, buttons);
+		layout.getChildren().addAll(title, username, password, buttons,tmp);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
 	
 	
-	
+	public Scene accMenuEmp() {
+		Label title = new Label("Account Menu");
+		
+		Button pFile = new Button("Personal information");
+		Button tTable= new Button("Time Table");
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, pFile, tTable);
+		
+		Scene scene = new Scene(layout, 500,500);
+		return scene;
+	}
 	
 }
