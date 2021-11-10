@@ -81,6 +81,7 @@ public class Database {
 
 	public boolean InsertCompD(String si,String li,String compName,String numEmp, String ownerName,String ownerEmail) {
 		//validators would go here 
+		
 		String q = "INSERT INTO Company (EIN,State_ID,Local_ID,Company_Name,Num_Employees,Owner_Name,Owner_Email) values( ?,?,?,?,?,?,? )";
 		try {
 			PreparedStatement stat = con.prepareStatement(q);
@@ -104,7 +105,8 @@ public class Database {
 
 	public boolean InsertEmp(String ePass,String eName,String ssn,String ePos,String pTy, String pAm) {
 		//validators here
-		String q = "INSERT INTO Employees (Employee_Password, Employee_Name, SSN, Company_FK, Employee_Position, Pay_Type, Pay_Amount) VALUES values( ?,?,?,?,?,?,? )";
+		int am = Integer.parseInt(pAm);
+		String q = "INSERT INTO Employees (Employee_Password, Employee_Name, SSN, Company_FK, Employee_Position, Pay_Type, Pay_Amount) VALUES( ?,?,?,?,?,?,? );";
 		try {
 			PreparedStatement stat = con.prepareStatement(q);
 			stat.setString(1,ePass);
@@ -113,7 +115,7 @@ public class Database {
 			stat.setInt(4,ein);
 			stat.setString(5,ePos);
 			stat.setString(6,pTy);
-			stat.setString(7,pAm);
+			stat.setInt(7,am);
 			if(stat.execute()) {
 				return true;
 			}else 
@@ -124,12 +126,40 @@ public class Database {
 		}
 		return false;
 	}
+	
+	public String getID(String x,int y) {
+		String q = "SELECT Employee_ID FROM Employees WHERE Employee_Name = '"+x+"' AND Company_FK = "+y+";";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			System.out.print(set.getString("Employee_ID"));
+			return set.getString("Employee_ID");
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
 
-	public boolean InsertPayment(String x) {
-		return false;
+	public String getPass(String x,int y) {
+		String q = "SELECT Employee_Password FROM Employees WHERE Employee_Name ='"+x+"' AND Company_FK = "+y+";";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			System.out.print(set.getString("Employee_Password"));
+			return (set.getString("Employee_Password"));
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
 	}
 	
-	public  void testq() {
+	public void testq() {
 		PreparedStatement Q;
 		try {
 			Q = con.prepareStatement("SELECT * FROM Employees;");
@@ -167,7 +197,7 @@ public class Database {
 	public class User{
 		
 		int aLv;
-		String eName;
+		public String eName;
 		
 		void tmp() {System.out.println("test");}
 		
@@ -193,6 +223,11 @@ public class Database {
 			}
 		}
 		public void seteName(String x) {
+			eName = x;
+		}
+		
+		
+		public void seteNameSQl(String x) {
 			String q = "SELECT Employee_Name FROM Employees WHERE Employee_ID = "+x+";";
 			PreparedStatement stat;
 			try {

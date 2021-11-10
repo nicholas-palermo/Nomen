@@ -1,7 +1,5 @@
 package nomen;
 
-import javax.swing.JTextArea;
-
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -117,7 +115,7 @@ public class UI extends Application{
 		
 		Button submit = new Button("Submit");
 		submit.setOnAction(e->{
-			if(db.InsertCompD(stateID.getText(), localID.getText(), name.getText(), empNum.getText(), oName.getText(), oEmail.getText())) {
+			if(!db.InsertCompD(stateID.getText(), localID.getText(), name.getText(), empNum.getText(), oName.getText(), oEmail.getText())) {
 				//System.out.print("Company doesnt exist");
 				Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 				stage.setScene(hrSignup());
@@ -135,7 +133,7 @@ public class UI extends Application{
 			});
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, stateID,localID,name,empNum,oName,oEmail, exit);
+		layout.getChildren().addAll(title, stateID,localID,name,empNum,oName,oEmail, submit,exit);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
@@ -157,10 +155,11 @@ public class UI extends Application{
 		Button submit = new Button("Submit");
 		submit.setOnAction(e->{
 			if(password.getText().equals(confirm.getText())) {//password check
-				if(db.InsertEmp(password.getText(), name.getText(), ssn.getText(),"HR", pTy.getText(), pAm.getText())) {
+				if(!db.InsertEmp(password.getText(), name.getText(), ssn.getText(),"HR", pTy.getText(), pAm.getText())) {
 					//System.out.print("Company doesnt exist");
+					db.use.seteName(name.getText());
 					Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
-					stage.setScene(compSignup());
+					stage.setScene(finalSignup());
 				}else {	//error pop up
 					errorAlert.setHeaderText("Error");
 					errorAlert.setContentText("Invalid input please retype and try again.");
@@ -180,25 +179,30 @@ public class UI extends Application{
 			});
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, password, confirm, name, ssn, pTy, pAm, exit);
+		layout.getChildren().addAll(title, password, confirm, name, ssn, pTy, pAm, submit,exit);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
 	
-	/*public Scene finalSignup() {
+	public Scene finalSignup() {
 		Label title = new Label("Sign Up");
-	
-		JTextArea a1 = new JTextArea();
-		//to do final signup - tell the user their id and password 
-	
+		
+		Label a1 = new Label("Your Id number is "+db.getID(db.use.eName, db.ein)+"\n"
+						   + "your password is "+db.getPass(db.use.eName, db.ein));
+		
+		Button fscreen = new Button("Return");
+		fscreen.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title);
+		layout.getChildren().addAll(title,a1,fscreen);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
-	}*/
-	
+	}
 	/**
 	 * sign in screen for logging in to existing account
 	 * @return sign in screen
@@ -230,20 +234,12 @@ public class UI extends Application{
 			stage.setScene(firstScreen());
 			});
 		
-		//tmp button to get to account menu to follow flow
-		Button tmp = new Button("tmp");
-		tmp.setOnAction(e->{
-			Stage stage = (Stage) tmp.getScene().getWindow();
-			stage.setScene(accMenuEmp());
-			});
-		
-		
 		HBox buttons = new HBox();
 		buttons.getChildren().addAll(submit, back);
 		buttons.setSpacing(20);
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, username, password, buttons,tmp);
+		layout.getChildren().addAll(title, username, password, buttons);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
