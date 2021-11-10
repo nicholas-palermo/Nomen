@@ -1,5 +1,7 @@
 package nomen;
 
+import javax.swing.JTextArea;
+
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -66,12 +68,22 @@ public class UI extends Application{
 	 */
 	public Scene signUpScreen() {
 		Label title = new Label("Sign Up");
-		TextField username = new TextField("username");
-		TextField password = new TextField("password");
-		TextField confirm = new TextField("confirm password");
+		
+		TextField EIN = new TextField("EIN");
+		Alert errorAlert = new Alert(AlertType.ERROR);
 		
 		Button submit = new Button("Submit");
-		
+		submit.setOnAction(e->{
+			if(!db.CompanyExists(EIN.getText())) {
+				//System.out.print("Company doesnt exist");
+				Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+				stage.setScene(compSignup());
+			}else {	//error pop up
+					errorAlert.setHeaderText("Error");
+					errorAlert.setContentText("Invalid Company already exists.");
+					errorAlert.showAndWait();
+			}
+		});
 		// navigates back to the first screen
 		Button back = new Button("Return");
 		back.setOnAction(e->{
@@ -84,11 +96,109 @@ public class UI extends Application{
 		buttons.setSpacing(20);
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, username, password, confirm, buttons);
+		layout.getChildren().addAll(title, EIN, buttons);
 		layout.setSpacing(20);
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
+	/*
+	 * Continued from signup this screen puts the company into the DB
+	 * */
+	public Scene compSignup() {
+		Label title = new Label("Sign Up");
+		
+		TextField stateID = new TextField("State ID");
+		TextField localID = new TextField("Local ID");
+		TextField name = new TextField("Company Name");
+		TextField empNum = new TextField("Number of employees");
+		TextField oName = new TextField("Owner's Name");
+		TextField oEmail = new TextField("Owner's Email");
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		
+		Button submit = new Button("Submit");
+		submit.setOnAction(e->{
+			if(db.InsertCompD(stateID.getText(), localID.getText(), name.getText(), empNum.getText(), oName.getText(), oEmail.getText())) {
+				//System.out.print("Company doesnt exist");
+				Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+				stage.setScene(hrSignup());
+			}else {	//error pop up
+					errorAlert.setHeaderText("Error");
+					errorAlert.setContentText("Invalid input please retype and try again.");
+					errorAlert.showAndWait();
+			}
+		});
+		
+		Button exit = new Button("Exit");
+		exit.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, stateID,localID,name,empNum,oName,oEmail, exit);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
+	/*
+	 * continued from compSignup now the head of hr is being inputted into the system
+	 * */
+	public Scene hrSignup() {
+		Label title = new Label("Sign Up");
+		
+		TextField password = new TextField("password");
+		TextField confirm = new TextField("confirm password");
+		TextField name = new TextField("Your Full Name");
+		TextField ssn = new TextField("Social Security Number");
+		TextField pTy = new TextField("Payment type");
+		TextField pAm = new TextField("Payment amount");
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		
+		Button submit = new Button("Submit");
+		submit.setOnAction(e->{
+			if(password.getText().equals(confirm.getText())) {//password check
+				if(db.InsertEmp(password.getText(), name.getText(), ssn.getText(),"HR", pTy.getText(), pAm.getText())) {
+					//System.out.print("Company doesnt exist");
+					Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+					stage.setScene(compSignup());
+				}else {	//error pop up
+					errorAlert.setHeaderText("Error");
+					errorAlert.setContentText("Invalid input please retype and try again.");
+					errorAlert.showAndWait();
+				}
+			}else{
+				errorAlert.setHeaderText("Error");
+				errorAlert.setContentText("Passwords do not match");
+				errorAlert.showAndWait();
+			}
+		});
+		
+		Button exit = new Button("Exit");
+		exit.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, password, confirm, name, ssn, pTy, pAm, exit);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
+	
+	/*public Scene finalSignup() {
+		Label title = new Label("Sign Up");
+	
+		JTextArea a1 = new JTextArea();
+		//to do final signup - tell the user their id and password 
+	
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}*/
+	
 	/**
 	 * sign in screen for logging in to existing account
 	 * @return sign in screen
@@ -105,7 +215,7 @@ public class UI extends Application{
 			if(db.loginCheck(username.getText(), password.getText())) {//checks if username and password true
 				Stage stage = (Stage) submit.getScene().getWindow();
 				stage.setScene(accMenuEmp());
-				System.out.print(db.use.aLv);
+				//System.out.print(db.use.aLv);
 			}else {//error pop up
 				errorAlert.setHeaderText("Error");
 				errorAlert.setContentText("Invalid Username or Password.");
