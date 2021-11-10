@@ -25,5 +25,40 @@ public class AccountMenuController {
 	}
 	public void goToTimeSheet(ActionEvent event) throws IOException {
 		// go to time sheet
+		// pass parameters so that once it reaches the time table screen, it loads that specific employee's time table
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/TimeTable.fxml"));
+		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	
+	// HR methods
+	public void goToIEM(ActionEvent event) throws IOException {
+		// go to time sheet
+		// pass parameters so that once it reaches the time table screen, it loads that specific employee's time table
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/InputEmpMenu.fxml"));
+		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	public void goToEEM(ActionEvent event) throws IOException {
+		// go to time sheet
+		// pass parameters so that once it reaches the time table screen, it loads that specific employee's time table
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/EditEmpMenu.fxml"));
+		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	public void goToCalcSal(ActionEvent event) throws IOException {
+		// go to time sheet
+		// pass parameters so that once it reaches the time table screen, it loads that specific employee's time table
+		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/CalculateSalary.fxml"));
+		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 }

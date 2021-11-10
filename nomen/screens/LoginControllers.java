@@ -51,7 +51,7 @@ public class LoginControllers {
 		 */
 		String url = "/Nomen/screens/";
 		// if (account == employee) 
-		url += "acMenuEmp.fxml";
+		url += "acMenuHR.fxml";
 		root = FXMLLoader.load(getClass().getResource(url));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
