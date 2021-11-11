@@ -8,22 +8,6 @@ public class Database {
 	User use = new User();
 	int ein;
 	
-	public ResultSet employeeLookup(Connection db, String uName, String pass) {
-		String mainQuery = "SELECT E.Employee_Name, E.Employee_Password FROM Employees "
-				+ "E WHERE E.Employee_Name = " + "'" + uName + "'"
-				+ " AND E.Employee_Password = " + "'" + pass + "'";
-		Statement statement;
-		ResultSet queryOutput = null;
-		try {
-			statement = db.createStatement();
-			queryOutput = statement.executeQuery(mainQuery);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return queryOutput; 
-	}
-	
 	public boolean loginCheck(String uname, String pass) {
 		String q = "SELECT Employee_ID, Employee_Password FROM Employees WHERE Employee_ID = "+uname+";";
 		PreparedStatement stat;
@@ -127,6 +111,28 @@ public class Database {
 		return false;
 	}
 	
+	public boolean InsertPinfo(int id,String name,String address,String pNumber, String email, String dis) {
+		String q = "Insert Into personal_information values (?,?,?,?,?,?);";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			stat.setInt(1,id);
+			stat.setString(2,name);
+			stat.setString(3,address);
+			stat.setString(4,pNumber);
+			stat.setString(5,email);
+			stat.setString(6,dis);
+			if(stat.execute()) {
+				return true;
+			}else 
+				return false;
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public String getID(String x,int y) {
 		String q = "SELECT Employee_ID FROM Employees WHERE Employee_Name = '"+x+"' AND Company_FK = "+y+";";
 		PreparedStatement stat;
@@ -158,29 +164,6 @@ public class Database {
 		}
 		return "error";
 	}
-	
-	public void testq() {
-		PreparedStatement Q;
-		try {
-			Q = con.prepareStatement("SELECT * FROM Employees;");
-			ResultSet res = Q.executeQuery();
-			while(res.next()) {
-				System.out.print(res.getString(1)+" ");
-				System.out.print(res.getString(2)+" ");
-				System.out.print(res.getString(3)+" ");
-				System.out.print(res.getString(4)+" ");
-				System.out.print(res.getString(5)+" ");
-				System.out.print(res.getString(6)+" ");
-				System.out.print(res.getString(7)+" ");
-				System.out.println(res.getString(8));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
 	
 	
 	

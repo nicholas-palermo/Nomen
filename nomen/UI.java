@@ -159,7 +159,7 @@ public class UI extends Application{
 					//System.out.print("Company doesnt exist");
 					db.use.seteName(name.getText());
 					Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
-					stage.setScene(finalSignup());
+					stage.setScene(pinfoSignup());
 				}else {	//error pop up
 					errorAlert.setHeaderText("Error");
 					errorAlert.setContentText("Invalid input please retype and try again.");
@@ -184,7 +184,46 @@ public class UI extends Application{
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
+	/*
+	 * User inputs their personal information
+	 * */
+	public Scene pinfoSignup() {
+		Label title = new Label("Sign Up");
+		
+		TextField address = new TextField("Your Address");
+		TextField pNumber = new TextField("Phone number");
+		TextField email = new TextField("Your email");
+		TextField dis = new TextField("Disability");
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		
+		Button submit = new Button("Submit");
+		submit.setOnAction(e->{
+				if(!db.InsertPinfo(db.use.getEmpID(db.use.eName),db.use.eName,address.getText(),pNumber.getText(),email.getText(),dis.getText())) {
+					Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+					stage.setScene(finalSignup());
+				}else {	//error pop up
+					errorAlert.setHeaderText("Error");
+					errorAlert.setContentText("Invalid input please retype and try again.");
+					errorAlert.showAndWait();
+				}
+		});
+		
+		Button exit = new Button("Exit");
+		exit.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title, address, pNumber, email, dis, submit,exit);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
 	
+	/*
+	 * Shows user their id and password before sending them to the opening menu
+	 * */
 	public Scene finalSignup() {
 		Label title = new Label("Sign Up");
 		
