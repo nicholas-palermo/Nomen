@@ -1,31 +1,12 @@
 package nomen;
 
 import java.sql.*;
-import keys.pass;
-
-
 
 public class Database {
-	//pass p = new pass();
-	//String password = p.getPass();
+	
 	Connection con; //where to store results of quereies
 	public User use = new User();
-	
-	public ResultSet employeeLookup(Connection db, String uName, String pass) {
-		String mainQuery = "SELECT E.Employee_Name, E.Employee_Password FROM Employees "
-				+ "E WHERE E.Employee_Name = " + "'" + uName + "'"
-				+ " AND E.Employee_Password = " + "'" + pass + "'";
-		Statement statement;
-		ResultSet queryOutput = null;
-		try {
-			statement = db.createStatement();
-			queryOutput = statement.executeQuery(mainQuery);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return queryOutput; 
-	}
+	int ein;
 	
 	public boolean loginCheck(String uname, String pass) {
 		String q = "SELECT Employee_ID, Employee_Password FROM Employees WHERE Employee_ID = "+uname+";";
@@ -40,7 +21,8 @@ public class Database {
 			}*/
 				if(set.getString(1).equals(uname)){
 					if(pass.equals(set.getString(2))) {
-						use.setaLv(uname);
+						use.setaLv(uname);//sets 
+						use.seteName(uname);
 						return true;
 				}else {
 					return false;
@@ -55,27 +37,135 @@ public class Database {
 		}
 		return false;
 		}
-		
-	public  void testq() {
-		PreparedStatement Q;
+	
+	public boolean CompanyExists(String comp) {//Checks if the company already exists within our DB
+		int com = Integer.parseInt(comp);
+		String q = "SELECT EIN FROM Company WHERE EIN = "+comp+";";
+		PreparedStatement stat;
 		try {
-			Q = con.prepareStatement("SELECT * FROM Employees;");
-			ResultSet res = Q.executeQuery();
-			while(res.next()) {
-				System.out.print(res.getString(1)+" ");
-				System.out.print(res.getString(2)+" ");
-				System.out.print(res.getString(3)+" ");
-				System.out.print(res.getString(4)+" ");
-				System.out.print(res.getString(5)+" ");
-				System.out.print(res.getString(6)+" ");
-				System.out.print(res.getString(7)+" ");
-				System.out.println(res.getString(8));
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			if(!set.next()) {//if it is empty
+				ein = com;
+				return false;
+			}else {
+			do {//if it returns results if they are equal
+			if(set.getInt("EIN")==com)
+				return true;
+			}while(set.next());
 			}
+			ein = com;//after checking the resultset if nothing matches its true
+			return false;
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	public boolean InsertCompD(String si,String li,String compName,String numEmp, String ownerName,String ownerEmail) {
+		//validators would go here 
+		
+		String q = "INSERT INTO Company (EIN,State_ID,Local_ID,Company_Name,Num_Employees,Owner_Name,Owner_Email) values( ?,?,?,?,?,?,? )";
+		try {
+			PreparedStatement stat = con.prepareStatement(q);
+			stat.setInt(1,ein);
+			stat.setString(2,si);
+			stat.setString(3,li);
+			stat.setString(4,compName);
+			stat.setString(5,numEmp);
+			stat.setString(6,ownerName);
+			stat.setString(7,ownerEmail);
+			if(stat.execute()) {
+				return true;
+			}else 
+				return false;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
 	}
+
+	public boolean InsertEmp(String ePass,String eName,String ssn,String ePos,String pTy, String pAm) {
+		//validators here
+		int am = Integer.parseInt(pAm);
+		String q = "INSERT INTO Employees (Employee_Password, Employee_Name, SSN, Company_FK, Employee_Position, Pay_Type, Pay_Amount) VALUES( ?,?,?,?,?,?,? );";
+		try {
+			PreparedStatement stat = con.prepareStatement(q);
+			stat.setString(1,ePass);
+			stat.setString(2,eName);
+			stat.setString(3,ssn);
+			stat.setInt(4,ein);
+			stat.setString(5,ePos);
+			stat.setString(6,pTy);
+			stat.setInt(7,am);
+			if(stat.execute()) {
+				return true;
+			}else 
+				return false;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean InsertPinfo(int id,String name,String address,String pNumber, String email, String dis) {
+		String q = "Insert Into personal_information values (?,?,?,?,?,?);";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			stat.setInt(1,id);
+			stat.setString(2,name);
+			stat.setString(3,address);
+			stat.setString(4,pNumber);
+			stat.setString(5,email);
+			stat.setString(6,dis);
+			if(stat.execute()) {
+				return true;
+			}else 
+				return false;
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public String getID(String x,int y) {
+		String q = "SELECT Employee_ID FROM Employees WHERE Employee_Name = '"+x+"' AND Company_FK = "+y+";";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			System.out.print(set.getString("Employee_ID"));
+			return set.getString("Employee_ID");
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
+
+	public String getPass(String x,int y) {
+		String q = "SELECT Employee_Password FROM Employees WHERE Employee_Name ='"+x+"' AND Company_FK = "+y+";";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			System.out.print(set.getString("Employee_Password"));
+			return (set.getString("Employee_Password"));
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
+	
+	
 	
 	//Constructor that connects to database upon inilization 
 	public Database() {
@@ -90,10 +180,15 @@ public class Database {
 	public class User{
 		
 		private int aLv;
-	
+		public String eName;
+		
 		void tmp() {System.out.println("test");}
 		
-		void setaLv(String x) {
+		public int getALv() {
+			return aLv;
+		}
+		
+		public void setaLv(String x) {
 			int uid = Integer.parseInt(x);
 			String q = "SELECT Employee_Position FROM Employees WHERE Employee_ID ="+uid+";";
 			PreparedStatement stat;
@@ -114,9 +209,39 @@ public class Database {
 				e.printStackTrace();
 			}
 		}
+		public void seteName(String x) {
+			eName = x;
+		}
 		
-		public int getALv() {
-			return this.aLv;
+		
+		public void seteNameSQl(String x) {
+			String q = "SELECT Employee_Name FROM Employees WHERE Employee_ID = "+x+";";
+			PreparedStatement stat;
+			try {
+				stat = con.prepareStatement(q);
+				ResultSet set = stat.executeQuery();
+				set.next();
+				eName = set.getString("Employee_Name");
+				//System.out.print(eName);
+			}catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		public int getEmpID(String x) {
+			String q = "Select Employee_ID From Employees where Employee_Name = "+x+";";
+			try {
+				PreparedStatement stat = con.prepareStatement(q);
+				stat = con.prepareStatement(q);
+				ResultSet set = stat.executeQuery();
+				set.next();
+				return set.getInt(1);
+			}catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 0;
 		}
 	}
 		
