@@ -141,16 +141,17 @@ public class SignUpControllers {
 		Stage stage = new Stage();
 		stage.setScene(new Scene(loader.load()));
 		
+		String s = "Your Id number is "+db.getID(db.use.eName, db.ein)+"\n"
+				   + "your password is "+db.getPass(db.use.eName, db.ein);
+		
+		FinalSignUpController controller = loader.getController();
+		controller.initData(s);
+		
 		stage.show();
 		return stage;
 	}
 	
-	@FXML private Label a1;
-	void intialize() {}
-	void initData() {
-		a1.setText("Your Id number is "+db.getID(db.use.eName, db.ein)+"\n"
-				   + "your password is "+db.getPass(db.use.eName, db.ein));
-	}
+	
 
 	
 	
