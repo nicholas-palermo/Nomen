@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import nomen.Database;
 
@@ -55,11 +56,12 @@ public class SignUpControllers {
 	@FXML TextField EIN;
 	public void signUp(ActionEvent event) throws IOException {
 		Alert errorAlert = new Alert(AlertType.ERROR);
+		System.out.println(EIN.getText());
 		if(!db.CompanyExists(EIN.getText())) {
 			//System.out.print("Company doesnt exist");
 			//Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 			//stage.setScene(compSignup());
-			root = FXMLLoader.load(getClass().getResource("/Nomen/screens/CompSignUpScreen.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/Nomen/screens/CompSignUp.fxml"));
 			stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 			scene = new Scene(root);
 			stage.setScene(scene);
@@ -79,7 +81,7 @@ public class SignUpControllers {
 			//System.out.print("Company doesnt exist");
 			//Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 			//stage.setScene(hrSignup());
-			root = FXMLLoader.load(getClass().getResource("/Nomen/screens/HrSignUpScreen.fxml"));
+			root = FXMLLoader.load(getClass().getResource("/Nomen/screens/HrSignUp.fxml"));
 			stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 			scene = new Scene(root);
 			stage.setScene(scene);
@@ -100,6 +102,9 @@ public class SignUpControllers {
 				db.use.seteName(name.getText());
 				//Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 				//stage.setScene(pinfoSignup());
+				
+				showFinalSignUp();
+				
 			}else {	//error pop up
 				errorAlert.setHeaderText("Error");
 				errorAlert.setContentText("Invalid input please retype and try again.");
@@ -119,11 +124,35 @@ public class SignUpControllers {
 				email.getText(),dis.getText())) {
 			//Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 			//stage.setScene(finalSignup());
+			
+			showFinalSignUp();
+			
 		}else {	//error pop up
 			errorAlert.setHeaderText("Error");
 			errorAlert.setContentText("Invalid input please retype and try again.");
 			errorAlert.showAndWait();
 		}
 	}
+	
+	public Stage showFinalSignUp() throws IOException {
+		
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/Nomen/screens/FinalSignUp.fxml"));
+		
+		Stage stage = new Stage();
+		stage.setScene(new Scene(loader.load()));
+		
+		stage.show();
+		return stage;
+	}
+	
+	@FXML private Label a1;
+	void intialize() {}
+	void initData() {
+		a1.setText("Your Id number is "+db.getID(db.use.eName, db.ein)+"\n"
+				   + "your password is "+db.getPass(db.use.eName, db.ein));
+	}
+
+	
+	
 	
 }

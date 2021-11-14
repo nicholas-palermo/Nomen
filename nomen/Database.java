@@ -6,7 +6,7 @@ public class Database {
 	
 	Connection con; //where to store results of quereies
 	public User use = new User();
-	int ein;
+	public int ein;
 	
 	public boolean loginCheck(String uname, String pass) {
 		String q = "SELECT Employee_ID, Employee_Password FROM Employees WHERE Employee_ID = "+uname+";";
@@ -170,7 +170,7 @@ public class Database {
 	//Constructor that connects to database upon inilization 
 	public Database() {
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/nomenpayroll?allowPublicKeyRetrieval=true&useSSL=false", "emp", "pass");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/nomenpayroll?allowPublicKeyRetrieval=true&useSSL=false", "root", "430dbHills");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

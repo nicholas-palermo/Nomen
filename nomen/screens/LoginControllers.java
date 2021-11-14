@@ -31,6 +31,7 @@ public class LoginControllers {
 		stage.show();
 	}
 	public void switchToSignUp(ActionEvent event) throws IOException {
+		System.out.println("123");
 		root = FXMLLoader.load(getClass().getResource("/Nomen/screens/SignUpScreen.fxml"));
 		stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
 		scene = new Scene(root);
@@ -66,10 +67,10 @@ public class LoginControllers {
 	public void login(ActionEvent e) throws IOException {
 		Alert errorAlert = new Alert(AlertType.ERROR);
 		if(db.loginCheck(username.getText(), password.getText())) {//checks if username and password true
+			System.out.print(db.use.getALv());
 			switchToAccountPage(e);
 			//Stage stage = (Stage) submit.getScene().getWindow();
 			//stage.setScene(accMenuEmp());
-			System.out.print(db.use.getALv());
 		}else {//error pop up
 			errorAlert.setHeaderText("Error");
 			errorAlert.setContentText("Invalid Username or Password.");

@@ -5,6 +5,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="nomen.screens.SignUpControllers">
    <children>
@@ -21,5 +23,10 @@
       <TextField fx:id="pAm" layoutX="368.0" layoutY="223.0" promptText="Payment Amount" />
       <Button layoutX="192.0" layoutY="294.0" mnemonicParsing="false" onAction="#HrSignUp" prefHeight="44.0" prefWidth="82.0" text="Submit" />
       <Button layoutX="327.0" layoutY="294.0" mnemonicParsing="false" onAction="#switchToCompSignUp" prefHeight="44.0" prefWidth="82.0" text="Exit" />
+   <ImageView fitHeight="110.0" fitWidth="153.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
