@@ -1,5 +1,8 @@
 package nomen;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -39,8 +42,7 @@ public class UI extends Application{
 		signIn.setOnAction(e->{
 			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
 			stage.setScene(logInScreen());
-			}
-		);
+			});
 		
 		// navigates to sign up screen
 		Button signUp = new Button("Sign up");
@@ -256,6 +258,8 @@ public class UI extends Application{
 		submit.setOnAction(e->{
 		//System.out.print(db.loginCheck(username.getText(), password.getText()));
 			if(db.loginCheck(username.getText(), password.getText())) {//checks if username and password true
+				db.use.seteNameSQl(username.getText());
+				db.setEin(username.getText(), password.getText());
 				Stage stage = (Stage) submit.getScene().getWindow();
 				stage.setScene(accMenuEmp());
 				//System.out.print(db.use.aLv);
@@ -283,19 +287,101 @@ public class UI extends Application{
 		Scene scene = new Scene(layout, 500, 500);
 		return scene;
 	}
-	
-	
+		
 	public Scene accMenuEmp() {
 		Label title = new Label("Account Menu");
 		
 		Button pFile = new Button("Personal information");
+		pFile.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(PersonalInfo());
+			}
+		);
+		Button Logout = new Button("Logout");
+		Logout.setOnAction(e->{
+			db.ein = 0;
+			db.use.seteName("");
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(firstScreen());
+			});
+		
 		Button tTable= new Button("Time Table");
 		
 		VBox layout = new VBox();
-		layout.getChildren().addAll(title, pFile, tTable);
+		layout.getChildren().addAll(title, pFile, tTable,Logout);
 		
 		Scene scene = new Scene(layout, 500,500);
 		return scene;
 	}
 	
+	/*
+	 * Shows user their id and password before sending them to the opening menu
+	 * */
+	public Scene PersonalInfo() {
+		Label title = new Label("Account Menu");
+		
+		String thing = db.getPinfo(db.use.getEmpID(db.use.eName));
+		Label a1 = new Label(thing);
+		
+		Button fscreen = new Button("Return");
+		fscreen.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(accMenuEmp());
+			});
+		Button update = new Button("Change");
+		update.setOnAction(e->{
+			Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+			stage.setScene(updatePinfo());
+			});
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title,a1,fscreen,update);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
+	
+	public Scene updatePinfo() {
+		Label title = new Label("Account Menu");
+		ResultSet set = db.getPinfoU(db.use.getEmpID(db.use.eName));
+		String name = "";
+		String add = "";
+		String pNum = "";
+		String email = "";
+		String dis = "";
+		try {
+			name += set.getString("Employee_Name_FK");
+			add += set.getString("Address");
+			pNum += set.getString("Phone_Number");
+			email += set.getString("Email");
+			dis += set.getString("Disability");
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		TextField Name =  new TextField(name);
+		TextField Add =  new TextField(add);
+		TextField PNum =  new TextField(pNum);
+		TextField Email =  new TextField(email);
+		TextField Dis =  new TextField(dis);
+		Alert errorAlert = new Alert(AlertType.ERROR);
+		
+		Button submit = new Button("Submit");
+		submit.setOnAction(e->{
+			if(!db.UpdatePinfo(db.use.getEmpID(db.use.eName), Name.getText(), Add.getText(), PNum.getText(), Email.getText(), Dis.getText())) {
+				Stage stage = (Stage) ((Node) e.getTarget()).getScene().getWindow();
+				stage.setScene(PersonalInfo());
+			}else{
+				errorAlert.setHeaderText("Error");
+				errorAlert.setContentText("Failed to Change information please message the help team");
+				errorAlert.showAndWait();
+			}
+		});
+		
+		VBox layout = new VBox();
+		layout.getChildren().addAll(title,Name,Add,PNum,Email,Dis,submit);
+		layout.setSpacing(20);
+		Scene scene = new Scene(layout, 500, 500);
+		return scene;
+	}
 }

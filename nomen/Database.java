@@ -133,6 +133,76 @@ public class Database {
 		return false;
 	}
 	
+	public boolean UpdatePinfo(int id,String name,String address,String pNumber, String email, String dis) {
+        String q = "UPDATE Personal_Information SET Employee_Name_FK = ?, Address = ?, Phone_Number = ?, Email = ?, Disability = ? WHERE Employee_ID_FK = "+id+";";
+        PreparedStatement stat;
+        try {
+            stat = con.prepareStatement(q);
+            stat.setString(1,name);
+            stat.setString(2,address);
+            stat.setString(3,pNumber);
+            stat.setString(4,email);
+            stat.setString(5,dis);
+            if(stat.execute()) {
+                return true;
+            }else 
+                return false;
+        }catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+	
+	public boolean UpdateEMPinfo(int id,String name,String ssn,String empP, String pt, String pa) {
+        String q = "UPDATE Employees SET Employee_Name = ?, SSN = ?, Employee_Position = ?, Pay_Type = ?, Pay_Amount = ? WHERE Employee_ID = "+id+";";
+        PreparedStatement stat;
+        try {
+            stat = con.prepareStatement(q);
+            stat.setString(1,name);
+            stat.setString(2,ssn);
+            stat.setString(3,empP);
+            stat.setString(4,pt);
+            stat.setString(5,pa);
+            if(stat.execute()) {
+                return true;
+            }else 
+                return false;
+        }catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+	public boolean UpdatetSheet(int id,String week,double sun,double mon,double tue, double wed, double thur, double fri, double sat, double vt, double st, String v) {
+        String q = "UPDATE timesheet SET "
+        		+ "Sunday = ?, Monday = ?, Tuesday = ?, Wednesday = ?,Thursday = ?, Friday = ? , Saturday = ?, Vaccation_Total = ?, Sick_Total = ?, Verified = ?"
+        		+ "WHERE Employee_ID_FK = '"+id+"' and Week_Date = '"+week+"';";
+        PreparedStatement stat;
+        try {
+            stat = con.prepareStatement(q);
+            stat.setDouble(1,sun);
+            stat.setDouble(2,mon);
+            stat.setDouble(3,tue);
+            stat.setDouble(4,wed);
+            stat.setDouble(5,thur);
+            stat.setDouble(6,fri);
+            stat.setDouble(7,sat);
+            stat.setDouble(8,vt);
+            stat.setDouble(9,st);
+            stat.setString(10,v);
+            if(stat.execute()) {
+                return true;
+            }else 
+                return false;
+        }catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
+    }
+	
 	public String getID(String x,int y) {
 		String q = "SELECT Employee_ID FROM Employees WHERE Employee_Name = '"+x+"' AND Company_FK = "+y+";";
 		PreparedStatement stat;
@@ -140,7 +210,7 @@ public class Database {
 			stat = con.prepareStatement(q);
 			ResultSet set = stat.executeQuery();
 			set.next();
-			System.out.print(set.getString("Employee_ID"));
+			//System.out.print(set.getString("Employee_ID"));
 			return set.getString("Employee_ID");
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -156,7 +226,7 @@ public class Database {
 			stat = con.prepareStatement(q);
 			ResultSet set = stat.executeQuery();
 			set.next();
-			System.out.print(set.getString("Employee_Password"));
+			//System.out.print(set.getString("Employee_Password"));
 			return (set.getString("Employee_Password"));
 		}catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -165,9 +235,63 @@ public class Database {
 		return "error";
 	}
 	
+	public String getPinfo(int y) {
+		String q = "SELECT * FROM Personal_information WHERE Employee_ID_FK = "+y+";";
+		PreparedStatement stat;
+		String ret = "";
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			ret += "Employee Id: "+set.getString("Employee_ID_FK")+"\n";
+			ret += "Name: "+set.getString("Employee_Name_FK")+"\n";
+			ret += "Address: "+set.getString("Address")+"\n";
+			ret += "Phone number: "+set.getString("Phone_Number")+"\n";
+			ret += "Email: "+set.getString("Email")+"\n";
+			ret += "Disability: "+set.getString("Disability")+"\n";
+
+			return ret;
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "error";
+	}
+
 	
 	
-	//Constructor that connects to database upon inilization 
+	public ResultSet getPinfoU(int y) {
+		String q = "SELECT * FROM Personal_information WHERE Employee_ID_FK = "+y+";";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+
+			return set;
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public void setEin(String x,String y) {
+		String q = "SELECT Company_FK FROM Employees WHERE Employee_ID ="+x+" AND Employee_Password = '"+y+"';";
+		PreparedStatement stat;
+		try {
+			stat = con.prepareStatement(q);
+			ResultSet set = stat.executeQuery();
+			set.next();
+			//System.out.print(set.getString("Employee_Password"));
+			ein = set.getInt("Company_FK");
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	//Constructor that connects to database upon inilization 	
 	public Database() {
 		try {
 			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/nomenpayroll?allowPublicKeyRetrieval=true&useSSL=false", "emp", "pass");
@@ -181,8 +305,6 @@ public class Database {
 		
 		int aLv;
 		public String eName;
-		
-		void tmp() {System.out.println("test");}
 		
 		public void setaLv(String x) {
 			int uid = Integer.parseInt(x);
@@ -208,8 +330,6 @@ public class Database {
 		public void seteName(String x) {
 			eName = x;
 		}
-		
-		
 		public void seteNameSQl(String x) {
 			String q = "SELECT Employee_Name FROM Employees WHERE Employee_ID = "+x+";";
 			PreparedStatement stat;
@@ -226,7 +346,7 @@ public class Database {
 			
 		}
 		public int getEmpID(String x) {
-			String q = "Select Employee_ID From Employees where Employee_Name = "+x+";";
+			String q = "Select Employee_ID From Employees where Employee_Name = '"+x+"';";
 			try {
 				PreparedStatement stat = con.prepareStatement(q);
 				stat = con.prepareStatement(q);
